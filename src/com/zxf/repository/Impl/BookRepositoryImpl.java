@@ -20,6 +20,7 @@ public class BookRepositoryImpl implements BookRepository {
         try {
             preparedStatement = connection.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
+            resultSet =
             
         } catch (SQLException e) {
             e.printStackTrace();
