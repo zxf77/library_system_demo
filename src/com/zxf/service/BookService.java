@@ -9,5 +9,6 @@ import java.util.List;
  */
 public interface BookService {
     //查询所有图书
-    public List<Book> findAll();
+    List<Book> findAll(int page);
+    int getPages();
 }

@@ -47,9 +47,12 @@ public class LoginServlet extends HttpServlet {
                 case "reader":
                     Reader reader = (Reader) object;
                     session.setAttribute("reader", reader);
-                    List<Book> books = bookService.findAll();
+                    List<Book> books = bookService.findAll(1);
                     //传到前端页面
                     req.setAttribute("books", books);
+                    req.setAttribute("dataPrePage", 6);
+                    req.setAttribute("currentPage", 1);
+                    req.setAttribute("pages", bookService.getPages());
                     //跳转到读者首页
                     req.getRequestDispatcher("index.jsp").forward(req, resp);
                     break;
