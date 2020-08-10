@@ -80,7 +80,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<td>操作</td>
 			</tr>
 
-			<c:forEach items="${list}" var="book">
+			<c:forEach items="${books}" var="book">
+
 				<tr>
 					<td>${book.id}</td>
 					<td>${book.name}</td>
@@ -89,9 +90,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<td>${book.pages}</td>
 					<td>${book.price}</td>
 					<td>${book.bookCase.name}</td>
-					<td>
+					<%--<td>
 						<a href="/book?method=addBorrow&bookid=${book.id}">借阅</a>
-					</td>
+					</td>--%>
 				</tr>
 			</c:forEach>
 			

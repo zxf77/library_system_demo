@@ -1,8 +1,11 @@
 package com.zxf.controller;
 
 import com.zxf.entity.Admin;
+import com.zxf.entity.Book;
 import com.zxf.entity.Reader;
+import com.zxf.service.BookService;
 import com.zxf.service.LoginService;
+import com.zxf.service.impl.BookServiceImpl;
 import com.zxf.service.impl.LoginServiceImpl;
 
 import javax.servlet.ServletException;
@@ -12,11 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
     private LoginService loginService = new LoginServiceImpl();
+    private BookService bookService = new BookServiceImpl();
 
     /**
      * 处理登录请求
@@ -42,9 +47,11 @@ public class LoginServlet extends HttpServlet {
                 case "reader":
                     Reader reader = (Reader) object;
                     session.setAttribute("reader", reader);
+                    List<Book> books = bookService.findAll();
+                    //传到前端页面
+                    req.setAttribute("books", books);
                     //跳转到读者首页
                     req.getRequestDispatcher("index.jsp").forward(req, resp);
-                    req.setAttribute("list", );
                     break;
                 case "admin":
                     Admin admin = (Admin) object;
