@@ -19,6 +19,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public int getPages() {
+        //获得数据库中所有书籍的数量
         int count = bookRepository.count();
         int page = 0;
         if (count % LIMIT == 0) {
