@@ -27,8 +27,8 @@ public class BorrowRepositoryImpl implements BorrowRepository {
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, bookid);
             preparedStatement.setInt(2, readerid);
-            preparedStatement.setString(2, borrowtime);
-            preparedStatement.setString(3, returntime);
+            preparedStatement.setString(3, borrowtime);
+            preparedStatement.setString(4, returntime);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
