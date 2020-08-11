@@ -81,4 +81,31 @@ public class BorrowRepositoryImpl implements BorrowRepository {
         }
         return borrows;
     }
+
+    /**
+     * 根据id查询一个用户所有的借书数据的总和
+     * @param readerid
+     * @return
+     */
+    @Override
+    public int count(Integer readerid) {
+        Connection connection = JDBCTools.getConnection();
+        String sql = "select count(*) from borrow where readerid = ?";
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        int count = 0;
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, readerid);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                count = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCTools.release(connection, preparedStatement, resultSet);
+        }
+        return count;
+    }
 }

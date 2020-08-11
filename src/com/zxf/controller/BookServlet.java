@@ -40,21 +40,21 @@ public class BookServlet extends HttpServlet {
                 req.getRequestDispatcher("index.jsp").forward(req, resp);
                 break;
             case "addBorrow":
-                //得到当前是第几页
-                pageStr = req.getParameter("page");
-                page = Integer.parseInt(pageStr);
                 String bookidStr = req.getParameter("bookid");
                 Integer bookid = Integer.parseInt(bookidStr);
                 //调用方法来添加借书数据
                 bookService.addBorrow(bookid, reader.getId());
-
+                resp.sendRedirect("/book?method=findAllBorrow&page=1");
                 break;
             case "findAllBorrow":
                 pageStr = req.getParameter("page");
                 page = Integer.parseInt(pageStr);
-                //按页展示当前用户所有的借书数据
+                //按页展示当前用户在这个页面的借书数据
                 List<Borrow> borrowList = bookService.findAllBorrowByReaderId(reader.getId(), page);
                 req.setAttribute("list", borrowList);
+                req.setAttribute("dataPrePage",6);
+                req.setAttribute("currentPage",page);
+                req.setAttribute("pages", bookService.getBorrowPages(reader.getId()));
                 req.getRequestDispatcher("borrow.jsp").forward(req, resp);
                 break;
         }

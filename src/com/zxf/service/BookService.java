@@ -15,6 +15,8 @@ public interface BookService {
     int getPages();
     //向借书的数据库中添加一条数据。
     void addBorrow(Integer bookid, Integer readerid);
-    //查找一个用户所有借书记录
+    //查找一个用户在这个页面的借书记录
     List<Borrow> findAllBorrowByReaderId(Integer readerid, Integer page);
+    //获取某个用户所有借书数据的一共的页数
+    int getBorrowPages(Integer readerid);
 }

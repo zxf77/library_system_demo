@@ -68,7 +68,7 @@ public class BookServiceImpl implements BookService {
     }
 
     /**
-     * 返回某个用户所有的借书数据
+     * 返回某个用户在某个页面的借书数据
      * @param readerid
      * @return
      */
@@ -77,5 +77,17 @@ public class BookServiceImpl implements BookService {
         //经page换算成index和limit
         int index = (page - 1) * LIMIT;
         return borrowRepository.findAllByReaderId(readerid, index, LIMIT);
+    }
+
+    @Override
+    public int getBorrowPages(Integer readerid) {
+        int count = bookRepository.count();
+        int pages = 0;
+        if (count % LIMIT == 0) {
+            pages = count / LIMIT;
+        } else {
+            pages = count / LIMIT + 1;
+        }
+        return pages;
     }
 }
