@@ -10,5 +10,8 @@ import java.util.List;
 public interface BookService {
     //查询所有图书
     List<Book> findAll(int page);
+    //得到总共的页数
     int getPages();
+    //向借书的数据库中添加一条数据。
+    void addBorrow(Integer bookid, Integer readerid);
 }
