@@ -1,6 +1,7 @@
 package com.zxf.service.impl;
 
 import com.zxf.entity.Book;
+import com.zxf.entity.Borrow;
 import com.zxf.repository.BookRepository;
 import com.zxf.repository.BorrowRepository;
 import com.zxf.repository.Impl.BookRepositoryImpl;
@@ -17,23 +18,33 @@ public class BookServiceImpl implements BookService {
     private final int LIMIT = 6;
     private BookRepository bookRepository = new BookRepositoryImpl();
     private BorrowRepository borrowRepository = new BorrowRepositoryImpl();
+
+    /**
+     * 获得数据库所有图书，按页展示
+     * @param page
+     * @return
+     */
     @Override
     public List<Book> findAll(int page) {
         int index = (page - 1) * LIMIT;
         return bookRepository.findAll(index, LIMIT);
     }
 
+    /**
+     * 获取分页的总页数
+     * @return
+     */
     @Override
     public int getPages() {
         //获得数据库中所有书籍的数量
         int count = bookRepository.count();
-        int page = 0;
+        int pages = 0;
         if (count % LIMIT == 0) {
-            page = count / LIMIT;
+            pages = count / LIMIT;
         } else {
-            page = count / LIMIT + 1;
+            pages = count / LIMIT + 1;
         }
-        return page;
+        return pages;
     }
 
     /**
@@ -54,5 +65,17 @@ public class BookServiceImpl implements BookService {
         Date date2 = calendar.getTime();
         String returnTime = simpleDateFormat.format(date2);
         borrowRepository.insert(bookid, readerid, borrowTime, returnTime, null, 0);
+    }
+
+    /**
+     * 返回某个用户所有的借书数据
+     * @param readerid
+     * @return
+     */
+    @Override
+    public List<Borrow> findAllBorrowByReaderId(Integer readerid, Integer page) {
+        //经page换算成index和limit
+        int index = (page - 1) * LIMIT;
+        return borrowRepository.findAllByReaderId(readerid, index, LIMIT);
     }
 }

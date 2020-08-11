@@ -1,6 +1,7 @@
 package com.zxf.controller;
 
 import com.zxf.entity.Book;
+import com.zxf.entity.Borrow;
 import com.zxf.entity.Reader;
 import com.zxf.service.BookService;
 import com.zxf.service.impl.BookServiceImpl;
@@ -23,6 +24,9 @@ public class BookServlet extends HttpServlet {
         if (method == null) {
             method = "findAll";
         }
+        //从session中获得当前登录的用户信息
+        HttpSession httpSession = req.getSession();
+        Reader reader = (Reader) httpSession.getAttribute("reader");
         switch (method) {
             case "findAll":
                 String pageStr = req.getParameter("page");
@@ -36,13 +40,22 @@ public class BookServlet extends HttpServlet {
                 req.getRequestDispatcher("index.jsp").forward(req, resp);
                 break;
             case "addBorrow":
+                //得到当前是第几页
+                pageStr = req.getParameter("page");
+                page = Integer.parseInt(pageStr);
                 String bookidStr = req.getParameter("bookid");
                 Integer bookid = Integer.parseInt(bookidStr);
-                //从session中获得当前登录的用户信息
-                HttpSession httpSession = req.getSession();
-                Reader reader = (Reader) httpSession.getAttribute("reader");
                 //调用方法来添加借书数据
                 bookService.addBorrow(bookid, reader.getId());
+
+                break;
+            case "findAllBorrow":
+                pageStr = req.getParameter("page");
+                page = Integer.parseInt(pageStr);
+                //按页展示当前用户所有的借书数据
+                List<Borrow> borrowList = bookService.findAllBorrowByReaderId(reader.getId(), page);
+                req.setAttribute("list", borrowList);
+                req.getRequestDispatcher("borrow.jsp").forward(req, resp);
                 break;
         }
     }

@@ -1,11 +1,17 @@
 package com.zxf.repository.Impl;
 
+import com.zxf.entity.Book;
+import com.zxf.entity.Borrow;
+import com.zxf.entity.Reader;
 import com.zxf.repository.BorrowRepository;
 import com.zxf.utils.JDBCTools;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BorrowRepositoryImpl implements BorrowRepository {
 
@@ -35,5 +41,44 @@ public class BorrowRepositoryImpl implements BorrowRepository {
         } finally {
             JDBCTools.release(connection, preparedStatement, null);
         }
+    }
+
+    /**
+     * 根据readerid查询这个reader的所有数据
+     * @param readerid
+     * @return
+     */
+    @Override
+    public List<Borrow> findAllByReaderId(Integer readerid, Integer index, Integer limit) {
+        Connection connection = JDBCTools.getConnection();
+        String sql = "select br.id, b.name, b.author, b.publish, br.borrowtime, br.returntime, r.name, r.tel, r.cardid, br.state from borrow br, book b, reader r where readerid = ? and b.id = br.bookid and r.id = br.readerid limit ?, ?";
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<Borrow> borrows = new ArrayList<>();
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, readerid);
+            preparedStatement.setInt(2, index);
+            preparedStatement.setInt(3, limit);
+            resultSet = preparedStatement.executeQuery();
+            //查找出来的表结构
+            //+-----+------------+----------+----------------+------------+------------+------+-----+--------+--------+
+            //| id  | name       | author   | publish        | borrowtime | returntime | name | tel | cardid | state |
+            //+-----+------------+----------+----------------+------------+------------+------+-----+--------+--------+
+            //| 219 | 解忧杂货店 | 东野圭吾 | 电子工业出版社 | 2020-03-11 | 2020-03-25 | 李四 | 131 | 001  | 001    | 0  |
+            //+-----+------------+----------+----------------+------------+------------+------+-----+--------+--------+
+            while (resultSet.next()) {
+                //封装成Borrow对象
+                borrows.add(new Borrow(resultSet.getInt(1),
+                        new Book(resultSet.getString(2), resultSet.getString(3),resultSet.getString(4)),
+                        new Reader(resultSet.getString(7), resultSet.getString(8), resultSet.getString(9)),
+                        resultSet.getString(5), resultSet.getString(6), resultSet.getInt(10)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCTools.release(connection, preparedStatement, resultSet);
+        }
+        return borrows;
     }
 }

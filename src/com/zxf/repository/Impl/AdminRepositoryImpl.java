@@ -29,6 +29,8 @@ public class AdminRepositoryImpl implements AdminRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            JDBCTools.release(connection, preparedStatement, resultSet);
         }
         return admin;
     }

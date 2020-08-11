@@ -11,6 +11,13 @@ public class Reader {
     private String cardid;
     private String gender;
 
+
+    public Reader(String name, String tel, String cardid) {
+        this.name = name;
+        this.tel = tel;
+        this.cardid = cardid;
+    }
+
     public Integer getId() {
         return id;
     }
