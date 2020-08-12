@@ -10,12 +10,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
   <head>
     <base href="<%=basePath%>">
-    
-    <title>My JSP 'borrow.jsp' starting page</title>
-    
+
+    <title>My JSP 'return.jsp' starting page</title>
+
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="expires" content="0">
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
 	<!--
@@ -32,7 +32,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					  return;
 				  }
 				  page++;
-				  location.href = "/book?method=findAllBorrow&page="+page;
+				  location.href = "/admin?method=getBorrowed&page="+page;
 			  })
 
 			  $("#previous").click(function () {
@@ -41,34 +41,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					  return;
 				  }
 				  page--;
-				  location.href = "/book?method=findAllBorrow&page="+page;
+				  location.href = "/admin?method=getBorrowed&page="+page;
 			  })
 
 			  $("#first").click(function () {
-				  location.href = "/book?method=findAllBorrow&page=1";
+				  location.href = "/admin?method=getBorrowed&page=1";
 			  })
 
 			  $("#last").click(function(){
 				  var pages = parseInt($("#pages").html());
-				  location.href = "/book?method=findAllBorrow&page="+pages;
+				  location.href = "/admin?method=getBorrowed&page="+pages;
 			  })
 		  })
 	  </script>
   </head>
-  
+
   <body>
     <%@ include file="top.jsp" %>
-  	
-  	
+
+
   	<div id="main">
 		<div class="navigation">
-				当前位置:&nbsp;&nbsp;<a href="/book?page=1">首页</a>
-				<div id="readerBlock">欢迎回来&nbsp;:${reader.name }&nbsp;<a href="/logout">注销</a></div>
+				当前位置:&nbsp;&nbsp;<a href="/admin?page=1">借书管理</a>
+				<div id="readerBlock">欢迎回来&nbsp;:${admin.username }&nbsp;<a href="/logout">注销</a></div>
 		</div>
 		<div class="img_block">
 			<img src="images/main_booksort.gif" class="img" />
 		</div>
-		
+
 		<table class="table" cellspacing="0">
 			<tr>
 				<td>编号</td>
@@ -76,40 +76,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<td>图书作者</td>
 				<td>出版社</td>
 				<td>读者姓名</td>
-				<td>联系电话</td>
 				<td>证件编号</td>
+				<td>联系电话</td>
 				<td>借书时间</td>
 				<td>还书时间</td>
-				<td>审核状态</td>
+				<td>操作</td>
 			</tr>
-			<c:forEach items="${list}" var="borrow">
-				<tr>
-					<td>${borrow.id}</td>
-					<td>${borrow.book.name}</td>
-					<td>${borrow.book.author}</td>
-					<td>${borrow.book.publish}</td>
-					<td>${borrow.reader.name}</td>
-					<td>${borrow.reader.tel}</td>
-					<td>${borrow.reader.cardid}</td>
-					<td>${borrow.borrowTime}</td>
-					<td>${borrow.returnTime}</td>
-					<td>
-						<c:if test="${borrow.state == 0}">
-							<font color="black">未审核</font>
-						</c:if>
-						<c:if test="${borrow.state == 1}">
-							<font color="green">审核通过</font>
-						</c:if>
-						<c:if test="${borrow.state == 2}">
-							<font color="red">未通过</font>
-						</c:if>
-						<c:if test="${borrow.state == 3}">
-							<font color="orange">已归还</font>
-						</c:if>
-					</td>
-				</tr>
+			<c:forEach items="${list }" var="borrow">
+			<tr>
+				<td>${borrow.id }</td>
+				<td>${borrow.book.name }</td>
+				<td>${borrow.book.author }</td>
+				<td>${borrow.book.publish }</td>
+				<td>${borrow.reader.name }</td>
+				<td>${borrow.reader.cardid }</td>
+				<td>${borrow.reader.tel }</td>
+				<td>${borrow.borrowTime }</td>
+				<td>${borrow.returnTime }</td>
+				<td>
+					<a href="/admin?method=handle&id=${borrow.id }&state=3">归还</a>
+				</td>
+			</tr>
 			</c:forEach>
-			
+
 		</table>
 		<hr class="hr"/>
 		<div id="pageControl">
@@ -122,7 +111,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 	</div>
 
-  	
    <%@ include file="footer.jsp" %>
   </body>
 </html>

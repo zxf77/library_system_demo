@@ -42,7 +42,21 @@ public class AdminServlet extends HttpServlet {
                 String stateStr = req.getParameter("state");
                 Integer state = Integer.parseInt(stateStr);
                 bookService.handleBorrow(id, state, admin.getId());
-                resp.sendRedirect("/admin?page=1");
+                if (state == 1 || state == 2) {
+                    resp.sendRedirect("/admin?page=1");
+                } else {
+                    resp.sendRedirect("/admin?method=getBorrowed&page=1");
+                }
+                break;
+            case "getBorrowed":
+                pageStr = req.getParameter("page");
+                page = Integer.parseInt(pageStr);
+                borrows = bookService.finAllBorrowByState(1, page);
+                req.setAttribute("list", borrows);
+                req.setAttribute("dataPrePage", 6);
+                req.setAttribute("currentPage", page);
+                req.setAttribute("pages", bookService.getPagesState(1));
+                req.getRequestDispatcher("return.jsp").forward(req, resp);
                 break;
         }
     }

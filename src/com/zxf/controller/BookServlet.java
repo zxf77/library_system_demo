@@ -44,7 +44,7 @@ public class BookServlet extends HttpServlet {
                 Integer bookid = Integer.parseInt(bookidStr);
                 //调用方法来添加借书数据
                 bookService.addBorrow(bookid, reader.getId());
-                resp.sendRedirect("/book?method=findAllBorrow&page=1");
+                resp.sendRedirect("/book?page=1");
                 break;
             case "findAllBorrow":
                 pageStr = req.getParameter("page");
