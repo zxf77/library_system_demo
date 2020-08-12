@@ -57,9 +57,6 @@ public class LoginServlet extends HttpServlet {
                     session.setAttribute("admin", admin);
                     //跳转到管理员首页
                     resp.sendRedirect("/admin?method=findAllBorrow&page=1");
-                    List<Borrow> borrows = bookService.finAllBorrowByState(0, 1);
-                    req.setAttribute("list", borrows);
-                    req.getRequestDispatcher("admin.jsp").forward(req, resp);
                     break;
             }
         } else {

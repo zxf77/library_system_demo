@@ -29,6 +29,7 @@ public class AdminServlet extends HttpServlet {
                 req.setAttribute("list", borrows);
                 req.setAttribute("dataPrePage", 6);
                 req.setAttribute("currentPage", page);
+                req.setAttribute("pages", bookService.getPagesState(0));
                 req.getRequestDispatcher("admin.jsp").forward(req, resp);
                 break;
         }

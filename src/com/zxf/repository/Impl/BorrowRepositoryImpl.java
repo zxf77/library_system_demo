@@ -140,4 +140,31 @@ public class BorrowRepositoryImpl implements BorrowRepository {
         }
         return borrows;
     }
+
+    /**
+     * 返回借书数据的总量
+     * @param state
+     * @return
+     */
+    @Override
+    public int countBorrows(Integer state) {
+        Connection connection = JDBCTools.getConnection();
+        String sql = "select count(*) from borrow where state = ?";
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        int count = 0;
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, state);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                count = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCTools.release(connection, preparedStatement, resultSet);
+        }
+        return count;
+    }
 }
