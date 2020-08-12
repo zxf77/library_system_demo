@@ -108,4 +108,36 @@ public class BorrowRepositoryImpl implements BorrowRepository {
         }
         return count;
     }
+
+    /**
+     * 根据state找到borrow中没有审核的数据，按页面查询
+     * @param state
+     * @return
+     */
+    @Override
+    public List<Borrow> findAllByState(Integer state, Integer index, Integer limit) {
+        Connection connection = JDBCTools.getConnection();
+        String sql = "select br.id, b.name, b.author, b.publish, br.borrowtime, br.returntime, r.name, r.tel, r.cardid, br.state from borrow br, book b, reader r where state = ? and b.id = br.bookid and r.id = br.readerid limit ?, ?";
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<Borrow> borrows = new ArrayList<>();
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, state);
+            preparedStatement.setInt(2, index);
+            preparedStatement.setInt(3, limit);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                borrows.add(new Borrow(resultSet.getInt(1),
+                        new Book(resultSet.getString(2), resultSet.getString(3),resultSet.getString(4)),
+                        new Reader(resultSet.getString(7), resultSet.getString(8), resultSet.getString(9)),
+                        resultSet.getString(5), resultSet.getString(6), resultSet.getInt(10)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCTools.release(connection, preparedStatement, resultSet);
+        }
+        return borrows;
+    }
 }

@@ -2,6 +2,7 @@ package com.zxf.controller;
 
 import com.zxf.entity.Admin;
 import com.zxf.entity.Book;
+import com.zxf.entity.Borrow;
 import com.zxf.entity.Reader;
 import com.zxf.service.BookService;
 import com.zxf.service.LoginService;
@@ -55,6 +56,10 @@ public class LoginServlet extends HttpServlet {
                     Admin admin = (Admin) object;
                     session.setAttribute("admin", admin);
                     //跳转到管理员首页
+                    resp.sendRedirect("/admin?method=findAllBorrow&page=1");
+                    List<Borrow> borrows = bookService.finAllBorrowByState(0, 1);
+                    req.setAttribute("list", borrows);
+                    req.getRequestDispatcher("admin.jsp").forward(req, resp);
                     break;
             }
         } else {

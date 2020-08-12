@@ -30,6 +30,15 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll(index, LIMIT);
     }
 
+    int getALLPages(int count) {
+        int pages = 0;
+        if (count % LIMIT == 0) {
+            pages = count / LIMIT;
+        } else {
+            pages = count / LIMIT + 1;
+        }
+        return pages;
+    }
     /**
      * 获取分页的总页数
      * @return
@@ -44,6 +53,7 @@ public class BookServiceImpl implements BookService {
         } else {
             pages = count / LIMIT + 1;
         }
+//        return getALLPages(bookRepository.count());
         return pages;
     }
 
@@ -79,9 +89,14 @@ public class BookServiceImpl implements BookService {
         return borrowRepository.findAllByReaderId(readerid, index, LIMIT);
     }
 
+    /**
+     * 得到借书数据的总页数
+     * @param readerid
+     * @return
+     */
     @Override
     public int getBorrowPages(Integer readerid) {
-        int count = bookRepository.count();
+        int count = borrowRepository.count(readerid);
         int pages = 0;
         if (count % LIMIT == 0) {
             pages = count / LIMIT;
@@ -89,5 +104,26 @@ public class BookServiceImpl implements BookService {
             pages = count / LIMIT + 1;
         }
         return pages;
+    }
+    /**
+     * 找到数据库的borrow表中所有未审核的数据，即state字段为0，按页面展示
+     * @param state
+     * @return
+     */
+    @Override
+    public List<Borrow> finAllBorrowByState(Integer state, Integer page) {
+        int index = (page - 1) * LIMIT;
+
+        return borrowRepository.findAllByState(state, index, LIMIT);
+    }
+
+    /**
+     * 计算state为0的一共多少页
+     * @param state
+     * @return
+     */
+    @Override
+    public int getPagesState(Integer state) {
+        return 0;
     }
 }

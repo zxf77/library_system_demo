@@ -19,4 +19,8 @@ public interface BookService {
     List<Borrow> findAllBorrowByReaderId(Integer readerid, Integer page);
     //获取某个用户所有借书数据的一共的页数
     int getBorrowPages(Integer readerid);
+    //找到数据库中所有未审核的借书数据，按页面展示
+    List<Borrow> finAllBorrowByState(Integer state, Integer page);
+    //得到未审核的数据一共有多少页
+    int getPagesState(Integer state);
 }

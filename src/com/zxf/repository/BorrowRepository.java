@@ -11,4 +11,6 @@ public interface BorrowRepository {
     List<Borrow> findAllByReaderId(Integer readerid, Integer index, Integer limit);
     //查询某个用户借书数据的总和
     int count(Integer readerid);
+    //找到未审核的数据，
+    List<Borrow> findAllByState(Integer state, Integer index, Integer limit);
 }
