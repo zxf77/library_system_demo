@@ -15,4 +15,6 @@ public interface BorrowRepository {
     List<Borrow> findAllByState(Integer state, Integer index, Integer limit);
     //找到未审核数据
     int countBorrows(Integer state);
+    //管理员处理一个借书请求
+    void handle(Integer borrowId, Integer state, Integer adminId);
 }

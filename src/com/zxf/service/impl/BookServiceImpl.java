@@ -116,4 +116,15 @@ public class BookServiceImpl implements BookService {
     public int getPagesState(Integer state) {
         return getALLPages(borrowRepository.countBorrows(state));
     }
+
+    /**
+     * 处理一条借书请求
+     * @param borrowId
+     * @param state
+     * @param adminId
+     */
+    @Override
+    public void handleBorrow(Integer borrowId, Integer state, Integer adminId) {
+        borrowRepository.handle(borrowId, state, adminId);
+    }
 }

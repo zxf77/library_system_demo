@@ -167,4 +167,28 @@ public class BorrowRepositoryImpl implements BorrowRepository {
         }
         return count;
     }
+
+    /**
+     * 管理员处理一条数据的数据库操作方法
+     * @param borrowId
+     * @param state
+     * @param adminId
+     */
+    @Override
+    public void handle(Integer borrowId, Integer state, Integer adminId) {
+        Connection connection = JDBCTools.getConnection();
+        String sql = "update borrow set state = ?, adminid = ? where id = ?";
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, state);
+            preparedStatement.setInt(2, adminId);
+            preparedStatement.setInt(3, borrowId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCTools.release(connection, preparedStatement, null);
+        }
+    }
 }

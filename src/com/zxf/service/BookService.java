@@ -23,4 +23,6 @@ public interface BookService {
     List<Borrow> finAllBorrowByState(Integer state, Integer page);
     //得到未审核的数据一共有多少页
     int getPagesState(Integer state);
+    //管理员处理一条借书请求
+    void handleBorrow(Integer borrowId, Integer state, Integer adminId);
 }
